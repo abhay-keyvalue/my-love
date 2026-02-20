@@ -8,58 +8,41 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600;800&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
 
 <style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family: 'Poppins', sans-serif;
-}
-
+*{margin:0;padding:0;box-sizing:border-box}
 body{
-    height:100vh;
+    font-family:'Poppins',sans-serif;
     overflow:hidden;
+    height:100vh;
+    background: linear-gradient(-45deg,#ff4e50,#ff6ec4,#7873f5,#42e695);
+    background-size:400% 400%;
+    animation:bg 10s ease infinite;
     display:flex;
     justify-content:center;
     align-items:center;
-    background: linear-gradient(-45deg, #ff4e50, #ff6ec4, #7873f5, #42e695);
-    background-size: 400% 400%;
-    animation: gradientBG 10s ease infinite;
     color:white;
     text-align:center;
 }
-
-@keyframes gradientBG {
+@keyframes bg{
     0%{background-position:0% 50%}
     50%{background-position:100% 50%}
     100%{background-position:0% 50%}
 }
 
-.container{
-    z-index:10;
-    padding:20px;
-}
+.container{z-index:10;padding:20px}
 
 h1{
-    font-family:'Dancing Script', cursive;
+    font-family:'Dancing Script',cursive;
     font-size:3rem;
-    animation: glow 2s ease-in-out infinite alternate;
+    animation:glow 2s infinite alternate;
 }
-
-@keyframes glow {
-    from { text-shadow: 0 0 10px #fff, 0 0 20px #ff4e50; }
-    to { text-shadow: 0 0 20px #fff, 0 0 40px #ff6ec4; }
-}
-
-.typing{
-    margin-top:20px;
-    font-size:1.2rem;
-    min-height:40px;
+@keyframes glow{
+    from{text-shadow:0 0 10px white}
+    to{text-shadow:0 0 30px #ff6ec4}
 }
 
 button{
-    margin-top:25px;
+    margin-top:20px;
     padding:12px 25px;
-    font-size:1rem;
     border:none;
     border-radius:30px;
     background:white;
@@ -67,120 +50,163 @@ button{
     cursor:pointer;
     transition:0.3s;
 }
+button:hover{transform:scale(1.1)}
 
-button:hover{
-    transform:scale(1.1);
-    box-shadow:0 0 20px white;
-}
+.hidden{display:none}
 
-/* Floating Hearts */
+/* Floating hearts */
 .heart{
     position:absolute;
     font-size:20px;
-    animation: float 8s linear infinite;
+    animation:float 6s linear forwards;
 }
-
 @keyframes float{
-    0%{transform:translateY(100vh) scale(0.5); opacity:1;}
-    100%{transform:translateY(-10vh) scale(1.5); opacity:0;}
+    from{transform:translateY(100vh)}
+    to{transform:translateY(-10vh)}
 }
 
-/* Fireworks */
-.firework{
+/* Game */
+#gameArea{
     position:absolute;
-    width:5px;
-    height:5px;
-    background:white;
-    border-radius:50%;
-    animation: explode 1s ease-out forwards;
+    width:100%;
+    height:100%;
+    top:0;
+    left:0;
+    overflow:hidden;
+    display:none;
 }
-
-@keyframes explode{
-    from {transform:scale(1); opacity:1;}
-    to {transform:scale(20); opacity:0;}
-}
-
-/* Confetti */
-.confetti{
+.catchHeart{
     position:absolute;
-    width:8px;
-    height:8px;
-    background:yellow;
-    animation: confettiFall 5s linear infinite;
+    font-size:30px;
+    cursor:pointer;
+    animation:fall 4s linear forwards;
+}
+@keyframes fall{
+    from{transform:translateY(-10vh)}
+    to{transform:translateY(100vh)}
 }
 
-@keyframes confettiFall{
-    0%{transform:translateY(-10vh) rotate(0deg);}
-    100%{transform:translateY(100vh) rotate(720deg);}
+/* Popup */
+#finalMessage{
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%) scale(0);
+    background:rgba(255,255,255,0.1);
+    backdrop-filter:blur(10px);
+    padding:30px;
+    border-radius:20px;
+    transition:0.6s;
+}
+#finalMessage.show{
+    transform:translate(-50%,-50%) scale(1);
+}
+
+/* Photo slider */
+.slider{
+    margin-top:20px;
+    width:250px;
+    height:300px;
+    overflow:hidden;
+    border-radius:20px;
+}
+.slider img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    animation:slide 15s infinite;
+}
+@keyframes slide{
+    0%{content:url('https://picsum.photos/400/600?random=1')}
+    33%{content:url('https://picsum.photos/400/600?random=2')}
+    66%{content:url('https://picsum.photos/400/600?random=3')}
+    100%{content:url('https://picsum.photos/400/600?random=1')}
 }
 
 @media(max-width:600px){
-    h1{font-size:2.2rem;}
-    .typing{font-size:1rem;}
+    h1{font-size:2.2rem}
 }
 </style>
 </head>
 <body>
 
-<audio autoplay loop>
-<source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
-</audio>
-
 <div class="container">
-    <h1>Happy Birthday My Love ❤️</h1>
-    <div class="typing" id="typing"></div>
-    <button onclick="surprise()">Click for Surprise 🎁</button>
+    <h1>Happy Birthday My Princess ❤️</h1>
+    <p>Click below to start your surprise 🎁</p>
+    <button onclick="startGame()">Start Surprise</button>
+</div>
+
+<div id="gameArea"></div>
+
+<div id="finalMessage">
+    <h2>I Love You Forever ❤️</h2>
+    <p>You caught my heart… now it belongs to you forever 💕</p>
+
+    <div class="slider">
+        <img src="https://picsum.photos/400/600?random=1">
+    </div>
 </div>
 
 <script>
-// Typing effect
-const text = "You are the most beautiful part of my life. 💕 Today is all about you. I love you endlessly! ❤️";
-let i=0;
-function typeWriter(){
-    if(i < text.length){
-        document.getElementById("typing").innerHTML += text.charAt(i);
-        i++;
-        setTimeout(typeWriter, 50);
-    }
-}
-typeWriter();
 
-// Floating hearts
-function createHeart(){
-    const heart = document.createElement("div");
-    heart.classList.add("heart");
+let score=0;
+let gameInterval;
+
+function startGame(){
+    document.querySelector(".container").classList.add("hidden");
+    document.getElementById("gameArea").style.display="block";
+    spawnHearts();
+    gameInterval=setInterval(spawnHearts,800);
+}
+
+function spawnHearts(){
+    const heart=document.createElement("div");
+    heart.classList.add("catchHeart");
     heart.innerHTML="❤️";
-    heart.style.left=Math.random()*100+"vw";
-    heart.style.animationDuration=(Math.random()*5+5)+"s";
-    document.body.appendChild(heart);
-    setTimeout(()=>heart.remove(),8000);
-}
-setInterval(createHeart,500);
-
-// Confetti
-function createConfetti(){
-    const conf = document.createElement("div");
-    conf.classList.add("confetti");
-    conf.style.left=Math.random()*100+"vw";
-    conf.style.background=`hsl(${Math.random()*360},100%,50%)`;
-    document.body.appendChild(conf);
-    setTimeout(()=>conf.remove(),5000);
-}
-setInterval(createConfetti,300);
-
-// Firework on click
-function surprise(){
-    for(let i=0;i<20;i++){
-        const fire=document.createElement("div");
-        fire.classList.add("firework");
-        fire.style.left=Math.random()*100+"vw";
-        fire.style.top=Math.random()*100+"vh";
-        fire.style.background=`hsl(${Math.random()*360},100%,50%)`;
-        document.body.appendChild(fire);
-        setTimeout(()=>fire.remove(),1000);
+    heart.style.left=Math.random()*90+"vw";
+    heart.onclick=function(){
+        score++;
+        heart.remove();
+        if(score>=10){
+            endGame();
+        }
     }
-    alert("I Love You So Much ❤️🎉");
+    document.getElementById("gameArea").appendChild(heart);
+    setTimeout(()=>heart.remove(),4000);
 }
+
+function endGame(){
+    clearInterval(gameInterval);
+    document.getElementById("gameArea").style.display="none";
+    showFinal();
+}
+
+function showFinal(){
+    document.getElementById("finalMessage").classList.add("show");
+    createExplosion();
+}
+
+function createExplosion(){
+    for(let i=0;i<100;i++){
+        const spark=document.createElement("div");
+        spark.style.position="absolute";
+        spark.style.width="5px";
+        spark.style.height="5px";
+        spark.style.background=`hsl(${Math.random()*360},100%,50%)`;
+        spark.style.top="50%";
+        spark.style.left="50%";
+        spark.style.borderRadius="50%";
+        spark.style.transform=`translate(-50%,-50%)`;
+        spark.style.transition="1s";
+        document.body.appendChild(spark);
+        setTimeout(()=>{
+            spark.style.transform=`translate(${Math.random()*1000-500}px,${Math.random()*1000-500}px)`;
+            spark.style.opacity=0;
+        },10);
+        setTimeout(()=>spark.remove(),1000);
+    }
+}
+
 </script>
 
 </body>
